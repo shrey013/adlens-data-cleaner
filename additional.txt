@@ -1,0 +1,29 @@
+//RUN & BUILD
+
+pip install -r requirements.txt
+python main.py
+
+brew install python-tk
+Verify....
+python3 -m tkinter      
+
+Create a virtual environment & install dependencies
+Open the VS Code terminal (⌃` — control + backtick) and run:
+
+bash
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+
+Run it
+Either click the ▶️ Run button (top-right) with main.py open, or in the terminal:
+
+bash
+python main.py
+
+Quick troubleshooting
+Problem	Fix
+ModuleNotFoundError: customtkinter	venv not activated / wrong interpreter selected (redo step 4)
+Window looks ugly / old-style	You're on Apple's system Python — use python.org or python-tk (step 1)
+_tkinter not found	Run brew install python-tk
+Run button uses wrong Python	Re-select interpreter (step 4)

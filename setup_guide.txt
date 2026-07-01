@@ -1,0 +1,176 @@
+# 🧼 AdLens Data Cleaner — Complete Setup, Run & Build Guide (Mac + Windows)
+
+## 📦 What This App Does
+Cleans raw AdClarity Excel exports: detects the header row, keeps only
+Filename / Impressions / First Seen / Last Seen, converts impression formats
+(5.4M, 235K, <5K…) and dates, filters by target month, filters by minimum
+impressions, removes duplicate creatives, sorts by impressions, preserves
+clickable creative links, and exports Cleaned_Data_<yourfile>.xlsx.
+
+## 📁 Project Files (all in ONE folder)
+main.py        gui.py         cleaner.py
+filters.py     exporter.py    utils.py
+config.py      components.py  animations.py
+requirements.txt
+
+==================================================================
+🍎  MAC GUIDE
+==================================================================
+
+--- PART 1: ONE-TIME SETUP (first time only) ---
+
+# 1. Check/Install Homebrew
+brew --version
+# If missing, install:
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# 2. Install Python 3.12 + Tk 8.6 (for crisp UI)
+brew install python@3.12 python-tk@3.12
+
+# 3. Install VS Code from code.visualstudio.com + the Python extension
+
+--- PART 2: PROJECT SETUP (first time for this app) ---
+
+# 1. VS Code: File → Open Folder → select your AdLens folder
+# 2. Open terminal: Control + `
+# 3. Create virtual environment:
+/opt/homebrew/bin/python3.12 -m venv venv
+
+# 4. Activate it (you should see (venv) appear):
+source venv/bin/activate
+
+# 5. Install libraries:
+pip install -r requirements.txt
+
+# 6. VS Code: ⇧⌘P → "Python: Select Interpreter" → choose ./venv
+# 7. (Optional) Verify Tk version is 8.6:
+python -c "import tkinter; print('Tk version:', tkinter.TkVersion)"
+
+--- PART 3: RUN THE APP (every time) ---
+
+source venv/bin/activate
+python main.py
+
+# How to use: Browse file → pick Target Month → set Min Impression →
+# Start Cleaning → find Cleaned_Data_<yourfile>.xlsx in the input's folder
+
+# QUICK START when returning later:
+cd ~/Desktop/AdLens
+source venv/bin/activate
+python main.py
+
+--- PART 4: BUILD SHAREABLE MAC APP (.app) ---
+
+# 1. Find CustomTkinter path (copy the output):
+python -c "import customtkinter, os; print(os.path.dirname(customtkinter.__file__))"
+
+# 2. Build (replace <PATH>, note the COLON ":" on Mac):
+pyinstaller --noconfirm --windowed --onedir --name "AdLens Data Cleaner" --add-data "<PATH>:customtkinter" main.py
+
+# 3. App appears at: dist/AdLens Data Cleaner.app
+# 4. Share: right-click .app → Compress → send the .zip
+#    Recipient: right-click → Open → Open (first time, Gatekeeper warning)
+#    NOTE: Mac .app runs on Macs only.
+
+==================================================================
+🪟  WINDOWS GUIDE
+==================================================================
+
+--- PART 1: ONE-TIME SETUP (first time only) ---
+
+# 1. Install Python from python.org/downloads/windows (3.12 or 3.13, 64-bit)
+#    ⚠️ TICK "Add Python to PATH" on the first installer screen!
+#    Verify:
+python --version
+
+# 2. Install VS Code from code.visualstudio.com + the Python extension
+
+--- PART 2: PROJECT SETUP (first time for this app) ---
+
+# 1. VS Code: File → Open Folder → select your AdLens folder
+#    (Make sure the folder DIRECTLY contains main.py — watch for AdLens\AdLens)
+# 2. Open terminal: Ctrl + `
+# 3. Create virtual environment:
+python -m venv venv
+
+# 4. Activate it (you should see (venv) appear):
+#    PowerShell:
+venv\Scripts\Activate.ps1
+#    OR Command Prompt (cmd):
+venv\Scripts\activate
+
+# 5. Install libraries:
+pip install -r requirements.txt
+
+# 6. VS Code: Ctrl+Shift+P → "Python: Select Interpreter" → choose .\venv
+
+--- PART 3: RUN / TEST THE APP (every time) ---
+
+venv\Scripts\Activate.ps1
+python main.py
+
+# Always test with python main.py BEFORE building — if it works, the .exe will too.
+
+--- PART 4: BUILD SHAREABLE .EXE ---
+
+# 1. Find CustomTkinter path (copy the output):
+python -c "import customtkinter, os; print(os.path.dirname(customtkinter.__file__))"
+
+# 2. Build (replace PASTE_PATH_HERE, note the SEMICOLON ";" on Windows):
+pyinstaller --noconfirm --windowed --onefile --name "AdLens Data Cleaner" --add-data "PASTE_PATH_HERE;customtkinter" main.py
+
+# 3. App appears at: dist\AdLens Data Cleaner.exe
+#    Open folder quickly:
+explorer dist
+
+# 4. Test: double-click AdLens Data Cleaner.exe
+
+--- PART 5: SHARE THE .EXE ---
+
+# Send ONLY: AdLens Data Cleaner.exe
+# Best via Google Drive / OneDrive / WeTransfer (email often blocks .exe)
+# Tell recipients: if Windows shows "Windows protected your PC" →
+# click "More info" → "Run anyway" (first time only). It's safe.
+# ✅ No Python needed on their PC · 🔒 Code stays hidden · Windows 10/11 64-bit
+
+==================================================================
+🔄  PUSH TO GITHUB (optional, from either OS)
+==================================================================
+
+# First time:
+git init
+git add .
+git commit -m "Initial commit"
+git branch -M main
+git remote add origin https://github.com/YOURNAME/adlens-data-cleaner.git
+git push -u origin main
+
+# After any change:
+git add .
+git commit -m "describe your change"
+git push
+
+# 🔒 Make the GitHub repo PRIVATE to keep your code hidden.
+
+==================================================================
+🔑  KEY MAC vs WINDOWS DIFFERENCES
+==================================================================
+Activate venv:      Mac: source venv/bin/activate   | Win: venv\Scripts\Activate.ps1
+--add-data sep:     Mac: ":" (colon)                | Win: ";" (semicolon)
+Build mode:         Mac: --onedir                   | Win: --onefile
+Output:             Mac: .app (zip to share)        | Win: .exe (share direct)
+Runs on:            Mac: Macs only                  | Win: Windows only
+
+==================================================================
+🛠️  TROUBLESHOOTING
+==================================================================
+(venv) not showing            → re-run the activate command
+ModuleNotFoundError customtkinter → re-run pip install -r requirements.txt
+'python'/'pyinstaller' not recognized → activate venv / add Python to PATH
+requirements.txt not found     → wrong folder; use dir/ls, cd into correct folder
+PowerShell won't activate      → switch terminal to Command Prompt
+Window looks old (Tk 8.5, Mac) → rebuild venv with Homebrew python3.12
+.exe/.app flashes and closes   → rebuild WITHOUT --windowed to see the error
+customtkinter error at runtime → --add-data path wrong (check : vs ; separator)
+
+Designed & Developed by Shreyansh Saurav 💙
